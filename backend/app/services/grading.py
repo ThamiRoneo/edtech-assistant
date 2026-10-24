@@ -50,3 +50,10 @@ class GradingService:
 
 
 grading_service = GradingService()
+
+
+# Few-shot enhancement
+try:
+    from app.services.fewshot import FEWSHOT_EXAMPLES
+except Exception:
+    FEWSHOT_EXAMPLES = []

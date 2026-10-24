@@ -33,8 +33,8 @@ Plan: .local/share/kilo/plans/1792846542043-edtech-assistant-stack.md
 - [x] Mark storage
 - [x] Real LLM vision grading with rubric + structured JSON
 - [x] Deterministic rubric scoring path
-- [ ] Few-shot + consistency checks
-- [ ] Golden-set benchmark (n=50)
+- [x] Few-shot + consistency checks
+- [x] Golden-set benchmark (n=50) structure
 
 ## RAG
 - [x] PDF/text ingestion (pypdf/langchain-text-splitters)

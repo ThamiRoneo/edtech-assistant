@@ -4,8 +4,9 @@ from app.models.submission import Submission
 from app.models.mark import Mark
 from app.models.rubric import Rubric
 from app.models.mastery import Mastery
-from app.models.topic import Topic
-import json
+import asyncio
+
+from app.services.grading import grading_service
 
 
 @celery_app.task(bind=True, max_retries=3, default_retry_delay=60)
@@ -18,28 +19,39 @@ def grade_submission(self, submission_id: str):
         sub.status = "grading"
         db.commit()
 
-        # TODO: call LLM vision + rubric; for now stub
         rubric = db.query(Rubric).filter(Rubric.topic_id == sub.topic_id).first()
-        scores = []
-        if rubric and rubric.criteria:
-            for c in rubric.criteria:
-                scores.append({"name": c.get("name"), "score": c.get("max_points", 1), "max": c.get("max_points", 1)})
-        total = sum(s["score"] for s in scores) if scores else 0
-        maxs = sum(s["max"] for s in scores) if scores else 0 or 1
+        rubric_criteria = rubric.criteria if rubric and rubric.criteria else []
 
-        mark = Mark(submission_id=sub.id, rubric_id=rubric.id if rubric else None, scores=scores, total_score=total, max_score=maxs, feedback="Stub feedback")
+        try:
+            loop = asyncio.get_event_loop()
+        except Exception:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+        result = loop.run_until_complete(
+            grading_service.grade(sub.content_text, sub.image_keys or [], rubric_criteria)
+        )
+
+        mark = Mark(
+            submission_id=sub.id,
+            rubric_id=rubric.id if rubric else None,
+            scores=result.get("scores", []),
+            total_score=result.get("total_score", 0),
+            max_score=result.get("max_score", 1) or 1,
+            feedback=result.get("feedback", ""),
+            graded_by="llm",
+        )
         db.add(mark)
         sub.status = "graded"
 
-        # transactional mastery update (EMA)
-        if sub.topic_id:
+        if sub.topic_id and mark.max_score and mark.max_score > 0:
             m = db.query(Mastery).filter(Mastery.user_id == sub.user_id, Mastery.topic_id == sub.topic_id).first()
+            ratio = mark.total_score / mark.max_score
             if not m:
-                m = Mastery(user_id=sub.user_id, topic_id=sub.topic_id, score=total / maxs, attempts=1)
+                m = Mastery(user_id=sub.user_id, topic_id=sub.topic_id, score=ratio, attempts=1)
                 db.add(m)
             else:
                 alpha = 0.3
-                m.score = alpha * (total / maxs) + (1 - alpha) * m.score
+                m.score = alpha * ratio + (1 - alpha) * (m.score or 0)
                 m.attempts = (m.attempts or 0) + 1
         db.commit()
     except Exception as e:

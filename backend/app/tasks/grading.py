@@ -1,7 +1,7 @@
 from app.tasks.celery_app import celery_app
 from app.core.db import SessionLocal
 from app.models.submission import Submission
-from app.models.mark import Mark
+from app.models.marks import Mark
 from app.models.rubric import Rubric
 from app.models.mastery import Mastery
 import asyncio

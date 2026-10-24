@@ -1,4 +1,4 @@
-from sqlalchemy import Column, DateTime, func, ForeignKey, JSON, Float, Text
+from sqlalchemy import Column, DateTime, func, ForeignKey, JSON, Float, Text, String
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 
@@ -11,7 +11,7 @@ class Mark(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     submission_id = Column(UUID(as_uuid=True), ForeignKey("submissions.id"), unique=True)
     rubric_id = Column(UUID(as_uuid=True), ForeignKey("rubrics.id"))
-    scores = Column(JSON)  # per criterion
+    scores = Column(JSON)
     total_score = Column(Float)
     max_score = Column(Float)
     feedback = Column(Text)

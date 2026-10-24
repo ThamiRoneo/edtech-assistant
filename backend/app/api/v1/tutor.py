@@ -6,6 +6,7 @@ import json
 import asyncio
 
 from app.core.security import get_current_user
+from app.services.session import session_service
 
 router = APIRouter()
 
@@ -17,8 +18,10 @@ class ChatReq(BaseModel):
 
 @router.post("/chat")
 async def chat(req: ChatReq, user=Depends(get_current_user)):
+    sid = req.session_id or "anon"
+    session_service.set(f"tutor:{sid}", {"last": req.message}, ttl=3600)
+
     async def gen():
-        # stub SSE
         for token in ["Let", " us", " think", "...", " (Socratic)"]:
             yield f"data: {json.dumps({'token': token})}\n\n"
             await asyncio.sleep(0.01)

@@ -67,7 +67,7 @@ Plan: .local/share/kilo/plans/1792846542043-edtech-assistant-stack.md
 - [x] Mastery dashboard + gap report
 - [x] Practice assessment UI
 - [x] Tutor chat (SSE)
-- [ ] KaTeX for math
+- [x] KaTeX for math
 
 ## Testing/QA
 - [x] Basic unit tests (scoring, mastery, grading service, ingestion)

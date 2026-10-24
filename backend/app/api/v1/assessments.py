@@ -53,3 +53,15 @@ def generate(req: GenReq, db: Session = Depends(get_db), user=Depends(get_curren
 def get_bank():
     from app.services.question_bank import MATH_QUESTIONS
     return {"questions": MATH_QUESTIONS}
+
+
+@router.post("/{assessment_id}/submit")
+def submit_assessment(assessment_id: str, answers: dict, db: Session = Depends(get_db), user=Depends(get_current_user)):
+    items = db.query(AssessmentItem).filter(AssessmentItem.assessment_id == assessment_id).all()
+    score = 0
+    total = len(items) or 1
+    for it in items:
+        ans = answers.get(str(it.id))
+        if ans and it.correct_answer and ans == it.correct_answer:
+            score += 1
+    return {"score": score, "total": total, "percentage": score / total}

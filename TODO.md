@@ -46,7 +46,7 @@ Plan: .local/share/kilo/plans/1792846542043-edtech-assistant-stack.md
 - [x] Adaptive difficulty by mastery
 - [x] Template question bank
 - [x] LLM distractor generation (partial)
-- [ ] Scoring/feedback
+- [x] Scoring/feedback
 
 ## Tutor
 - [x] Redis session state

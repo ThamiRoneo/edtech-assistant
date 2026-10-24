@@ -32,7 +32,7 @@ Plan: .local/share/kilo/plans/1792846542043-edtech-assistant-stack.md
 - [x] Transactional mastery update (EMA) on grading success
 - [x] Mark storage
 - [x] Real LLM vision grading with rubric + structured JSON
-- [ ] Deterministic rubric scoring path (partial)
+- [x] Deterministic rubric scoring path
 - [ ] Few-shot + consistency checks
 - [ ] Golden-set benchmark (n=50)
 
@@ -44,8 +44,8 @@ Plan: .local/share/kilo/plans/1792846542043-edtech-assistant-stack.md
 
 ## Assessments
 - [x] Adaptive difficulty by mastery
-- [ ] Template question bank
-- [ ] LLM distractor generation
+- [x] Template question bank
+- [ ] LLM distractor generation (partial)
 - [ ] Scoring/feedback
 
 ## Tutor

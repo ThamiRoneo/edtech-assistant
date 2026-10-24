@@ -57,7 +57,7 @@ Plan: .local/share/kilo/plans/1792846542043-edtech-assistant-stack.md
 - [x] S3-compatible upload (presigned)
 - [x] Clerk webhook/user sync hardening (middleware + keys)
 - [x] CORS/env validation
-- [ ] Production hardening (PII, retention)
+- [x] Production hardening (PII, retention)
 
 ## Frontend (Next.js)
 - [x] Next.js + TypeScript + Tailwind + shadcn/ui scaffold

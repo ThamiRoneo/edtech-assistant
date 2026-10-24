@@ -40,7 +40,7 @@ Plan: .local/share/kilo/plans/1792846542043-edtech-assistant-stack.md
 - [x] PDF/text ingestion (pypdf/langchain-text-splitters)
 - [x] Retrieval service (pgvector)
 - [x] Embeddings path scaffolded
-- [ ] Curriculum seeding
+- [x] Curriculum seeding
 
 ## Assessments
 - [x] Adaptive difficulty by mastery

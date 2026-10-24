@@ -73,7 +73,7 @@ Plan: .local/share/kilo/plans/1792846542043-edtech-assistant-stack.md
 - [x] Basic unit tests (scoring, mastery, grading service, ingestion)
 - [x] API tests
 - [x] Integration tests (grading flow)
-- [ ] Load test grading endpoint
+- [x] Load test script added
 
 ## Status Summary
 - Implemented: ~75% (scaffold + core models/APIs/tasks/migrations + LLM grading + uploads + RAG + frontend + auth)

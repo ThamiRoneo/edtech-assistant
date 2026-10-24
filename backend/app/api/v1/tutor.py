@@ -18,12 +18,16 @@ class ChatReq(BaseModel):
 
 @router.post("/chat")
 async def chat(req: ChatReq, user=Depends(get_current_user)):
-    sid = req.session_id or "anon"
-    session_service.set(f"tutor:{sid}", {"last": req.message}, ttl=3600)
+    sid = req.session_id or user.get("sub") or "anon"
+    history = session_service.get(f"tutor:{sid}") or []
+    history.append({"role": "user", "content": req.message})
+    session_service.set(f"tutor:{sid}", history[-10:], ttl=3600)
 
     async def gen():
-        for token in ["Let", " us", " think", "...", " (Socratic)"]:
+        # Socratic hints ladder
+        tokens = ["Let's think step by step. ", "What do we know? ", "Can we break it down? ", f"Hint: relate to {req.message[:20]}..."]
+        for token in tokens:
             yield f"data: {json.dumps({'token': token})}\n\n"
-            await asyncio.sleep(0.01)
+            await asyncio.sleep(0.02)
         yield "data: [DONE]\n\n"
     return StreamingResponse(gen(), media_type="text/event-stream")

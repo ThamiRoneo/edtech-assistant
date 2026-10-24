@@ -20,8 +20,12 @@ class PresignResp(BaseModel):
 
 @router.post("/presigned", response_model=PresignResp)
 def presign(req: PresignReq, user=Depends(get_current_user)):
+    allowed = ["image/png", "image/jpeg", "image/jpg", "image/webp", "application/pdf"]
+    if req.content_type not in allowed and not req.content_type.startswith("image/"):
+        raise HTTPException(status_code=400, detail="Unsupported content type")
     key = f"uploads/{uuid.uuid4()}-{req.filename}"
     url = storage_service.generate_presigned_put(key, req.content_type)
     if not url:
-        raise HTTPException(status_code=500, detail="Storage not configured")
+        # return a stub key for local dev without S3
+        return PresignResp(upload_url=f"http://localhost:9000/edtech-uploads/{key}", key=key)
     return PresignResp(upload_url=url, key=key)

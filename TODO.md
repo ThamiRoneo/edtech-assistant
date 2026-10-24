@@ -78,3 +78,10 @@ Plan: .local/share/kilo/plans/1792846542043-edtech-assistant-stack.md
 ## Status Summary
 - Implemented: ~75% (scaffold + core models/APIs/tasks/migrations + LLM grading + uploads + RAG + frontend + auth)
 - Remaining: polish (deterministic rubric path, few-shot, embeddings production, question bank, distractors, KaTeX, tests)
+
+## Recent Updates
+- [x] Clerk auth integrated (keys configured, middleware added)
+- [x] Postgres + pgvector installed locally
+- [x] Redis installed locally
+- [x] Backend running on :8000, frontend on :3000
+- [x] Test user created via Clerk

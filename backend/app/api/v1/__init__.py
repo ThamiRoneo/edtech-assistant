@@ -8,3 +8,5 @@ router.include_router(mastery.router, prefix="/mastery", tags=["mastery"])
 router.include_router(assessments.router, prefix="/assessments", tags=["assessments"])
 router.include_router(tutor.router, prefix="/tutor", tags=["tutor"])
 router.include_router(knowledge.router, prefix="/knowledge", tags=["knowledge"])
+from app.api.v1 import uploads
+router.include_router(uploads.router, prefix="/uploads", tags=["uploads"])

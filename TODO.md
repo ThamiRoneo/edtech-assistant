@@ -72,7 +72,7 @@ Plan: .local/share/kilo/plans/1792846542043-edtech-assistant-stack.md
 ## Testing/QA
 - [x] Basic unit tests (scoring, mastery, grading service, ingestion)
 - [x] API tests
-- [ ] Integration tests (grading flow)
+- [x] Integration tests (grading flow)
 - [ ] Load test grading endpoint
 
 ## Status Summary

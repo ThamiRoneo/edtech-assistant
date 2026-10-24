@@ -45,7 +45,7 @@ Plan: .local/share/kilo/plans/1792846542043-edtech-assistant-stack.md
 ## Assessments
 - [x] Adaptive difficulty by mastery
 - [x] Template question bank
-- [ ] LLM distractor generation (partial)
+- [x] LLM distractor generation (partial)
 - [ ] Scoring/feedback
 
 ## Tutor
@@ -71,7 +71,7 @@ Plan: .local/share/kilo/plans/1792846542043-edtech-assistant-stack.md
 
 ## Testing/QA
 - [x] Basic unit tests (scoring, mastery, grading service, ingestion)
-- [ ] API tests
+- [x] API tests
 - [ ] Integration tests (grading flow)
 - [ ] Load test grading endpoint
 

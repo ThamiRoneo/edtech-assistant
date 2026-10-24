@@ -47,3 +47,9 @@ def generate(req: GenReq, db: Session = Depends(get_db), user=Depends(get_curren
     db.commit()
     items = db.query(AssessmentItem).filter(AssessmentItem.assessment_id == a.id).all()
     return {"assessment_id": str(a.id), "difficulty": difficulty, "items": [{"id": str(it.id), "question_text": it.question_text, "choices": it.choices} for it in items]}
+
+
+@router.get("/bank")
+def get_bank():
+    from app.services.question_bank import MATH_QUESTIONS
+    return {"questions": MATH_QUESTIONS}

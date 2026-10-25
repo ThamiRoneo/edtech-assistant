@@ -1,6 +1,5 @@
 'use client';
 
-import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 
 export default function Dashboard() {
@@ -14,7 +13,6 @@ export default function Dashboard() {
             <Link href="/mastery" className="hover:text-[var(--color-primary)]">Mastery</Link>
             <Link href="/assess" className="hover:text-[var(--color-primary)]">Practice</Link>
             <Link href="/tutor" className="hover:text-[var(--color-primary)]">Tutor</Link>
-            <UserButton />
           </div>
         </div>
       </nav>

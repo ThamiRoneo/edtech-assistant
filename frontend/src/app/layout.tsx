@@ -27,13 +27,13 @@ export default function RootLayout({
                 <a href="/mastery" className="text-[var(--color-foreground)] hover:text-[var(--color-primary)] transition-colors">Mastery</a>
                 <a href="/assess" className="text-[var(--color-foreground)] hover:text-[var(--color-primary)] transition-colors">Practice</a>
                 <a href="/tutor" className="text-[var(--color-foreground)] hover:text-[var(--color-primary)] transition-colors">Tutor</a>
-                <div className="flex items-center gap-2 ml-4">
+                <div className="flex items-center gap-3 ml-6">
                   <SignedOut>
                     <SignInButton mode="modal">
-                      <button className="text-[var(--color-foreground)] hover:text-[var(--color-primary)] px-3 py-2 transition-colors">Log In</button>
+                      <button className="text-[var(--color-foreground)] hover:text-[var(--color-primary)] px-4 py-2 font-medium transition-colors">Log In</button>
                     </SignInButton>
                     <SignUpButton mode="modal">
-                      <button className="bg-[var(--color-primary)] text-white px-4 py-2 rounded-lg hover:opacity-90 transition-opacity">Sign Up</button>
+                      <button className="bg-[var(--color-primary)] text-white px-5 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity shadow-sm">Sign Up</button>
                     </SignUpButton>
                   </SignedOut>
                   <SignedIn>

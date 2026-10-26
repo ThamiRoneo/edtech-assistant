@@ -1,5 +1,6 @@
 'use client';
 
+import Link from "next/link";
 import StatCard from "@/components/StatCard";
 import MasteryTrack from "@/components/MasteryTrack";
 

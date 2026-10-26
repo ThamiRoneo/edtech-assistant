@@ -20,7 +20,7 @@ export default function Rail() {
       style={{ width: "var(--shell-rail-w)", height: "100vh" }}
     >
       <div className="px-5 pt-5 pb-4">
-        <Link href="/dashboard" className="flex items-center gap-2.5">
+        <Link href="/" className="flex items-center gap-2.5">
           <Mark />
           <span className="text-lg font-bold tracking-tight text-foreground">
             EdTech

@@ -25,41 +25,45 @@ export default function Landing() {
         </div>
       </nav>
 
-      <section className="max-w-6xl mx-auto px-6 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+      <section className="max-w-6xl mx-auto px-6 py-16 lg:py-24">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-primary">Curriculum-aligned mastery</p>
-            <h1 className="mt-3 text-5xl font-bold tracking-tight">
-              Master math with AI that builds from where you actually are.
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary">Built for K-12 learners</p>
+            <h1 className="mt-3 text-5xl lg:text-6xl font-bold tracking-tight">
+              Math confidence, built one solution at a time.
             </h1>
-            <p className="mt-4 text-lg text-muted max-w-xl">
-              Submit a solution, get rubric-grounded feedback, track per-topic mastery, and close gaps with adaptive practice and a Socratic tutor.
+            <p className="mt-5 text-lg lg:text-xl text-muted max-w-xl">
+              Get rubric-grounded feedback on every answer, see exactly where you're growing, and close gaps with practice that adapts to you.
             </p>
-            <div className="mt-6 flex flex-wrap items-center gap-3">
-              <Link href="/sign-up" className="rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-white hover:bg-primary-600">Start free</Link>
-              <Link href="/dashboard" className="rounded-lg border border-border px-6 py-3 text-sm hover:border-primary/40">Go to app</Link>
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <Link href="/sign-up" className="rounded-lg bg-primary px-7 py-3 text-sm font-semibold text-white hover:bg-primary-600 transition-colors shadow-sm">Start learning free</Link>
+              <Link href="/dashboard" className="rounded-lg border border-border bg-surface px-7 py-3 text-sm font-semibold hover:border-primary/40 transition-colors">See how it works</Link>
             </div>
+            <p className="mt-4 text-sm text-muted">No credit card required. Focus on learning, not grading.</p>
           </div>
-          <div className="rounded-xl border border-border bg-surface p-4 shadow-sm">
-            <div className="flex items-center justify-between mb-3">
+          <div className="rounded-xl border border-border bg-surface p-5 shadow-sm">
+            <div className="flex items-center justify-between mb-4">
               <h3 className="text-sm font-semibold">Mastery preview</h3>
-              <span className="text-xs text-muted">demo student</span>
+              <span className="text-xs text-muted">Demo student • Last updated today</span>
             </div>
-            <div className="space-y-2">
+            <div className="space-y-3">
               {DEMO.map((d) => (
                 <div key={d.label}>
                   <div className="flex items-center justify-between text-sm">
-                    <span>{d.label}</span>
-                    <span className={d.pct < 50 ? "text-warning" : "text-primary"}>{d.pct}%</span>
+                    <span className="font-medium">{d.label}</span>
+                    <span className={d.pct < 50 ? "text-warning font-semibold" : "text-primary font-semibold"}>{d.pct}%</span>
                   </div>
-                  <div className="mt-1 h-2 w-full rounded-full bg-border">
+                  <div className="mt-1.5 h-2.5 w-full rounded-full bg-border">
                     <div
-                      className={`h-full rounded-full ${d.pct < 50 ? "bg-warning" : "bg-primary"}`}
+                      className={`h-full rounded-full transition-all ${d.pct < 50 ? "bg-warning" : "bg-primary"}`}
                       style={{ width: `${d.pct}%` }}
                     />
                   </div>
                 </div>
               ))}
+            </div>
+            <div className="mt-4 pt-4 border-t border-border/60">
+              <p className="text-xs text-muted">Focus area: <span className="text-warning font-medium">Ratios</span> — practice ready</p>
             </div>
           </div>
         </div>

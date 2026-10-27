@@ -37,9 +37,9 @@ export default function Landing() {
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Link href="/sign-up" className="rounded-lg bg-primary px-7 py-3 text-sm font-semibold text-white hover:bg-primary-600 transition-colors shadow-sm">Start learning free</Link>
-              <Link href="/dashboard" className="rounded-lg border border-border bg-surface px-7 py-3 text-sm font-semibold hover:border-primary/40 transition-colors">See how it works</Link>
+              <Link href="#how-it-works" className="rounded-lg border border-border bg-surface px-7 py-3 text-sm font-semibold hover:border-primary/40 transition-colors">See how it works</Link>
             </div>
-            <p className="mt-4 text-sm text-muted">No credit card required. Focus on learning, not grading.</p>
+            <p className="mt-4 text-sm text-muted">Built for K-12 learners • No credit card required</p>
           </div>
           <div className="rounded-xl border border-border bg-surface p-5 shadow-sm">
             <div className="flex items-center justify-between mb-4">
@@ -69,8 +69,36 @@ export default function Landing() {
         </div>
       </section>
 
+      <section id="how-it-works" className="max-w-6xl mx-auto px-6 py-16">
+        <div className="text-center max-w-2xl mx-auto">
+          <p className="text-xs font-semibold uppercase tracking-wide text-primary">How it works</p>
+          <h2 className="mt-3 text-3xl lg:text-4xl font-bold tracking-tight">Learn smarter, not harder</h2>
+          <p className="mt-4 text-lg text-muted">Three simple steps to build real math confidence.</p>
+        </div>
+        <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Step number="1" title="Submit your work" desc="Type your solution or upload a photo. Get started in seconds." />
+          <Step number="2" title="Get actionable feedback" desc="Receive rubric-grounded grading with specific suggestions you can actually use." />
+          <Step number="3" title="Track and practice" desc="Watch mastery grow, close gaps with adaptive practice, and ask the tutor when you're stuck." />
+        </div>
+        <div className="mt-10 text-center">
+          <Link href="/sign-up" className="rounded-lg bg-primary px-7 py-3 text-sm font-semibold text-white hover:bg-primary-600 transition-colors shadow-sm">Start learning free</Link>
+        </div>
+      </section>
+
       <Footer />
     </main>
+  );
+}
+
+function Step({ number, title, desc }: { number: string; title: string; desc: string }) {
+  return (
+    <div className="rounded-xl border border-border bg-surface p-6">
+      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
+        {number}
+      </div>
+      <h3 className="mt-4 text-lg font-semibold">{title}</h3>
+      <p className="mt-2 text-sm text-muted">{desc}</p>
+    </div>
   );
 }
 

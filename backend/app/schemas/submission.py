@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional, List
 from uuid import UUID
 from datetime import datetime
@@ -11,6 +11,8 @@ class SubmissionCreate(BaseModel):
 
 
 class SubmissionOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: UUID
     user_id: UUID
     topic_id: Optional[UUID]
@@ -18,6 +20,3 @@ class SubmissionOut(BaseModel):
     image_keys: Optional[List[str]]
     status: str
     created_at: datetime
-
-    class Config:
-        from_attributes = True

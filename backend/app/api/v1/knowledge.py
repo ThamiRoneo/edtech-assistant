@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, UploadFile, File, HTTPException
 from sqlalchemy.orm import Session
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from app.core.db import get_db
 from app.core.security import get_current_user
@@ -47,6 +47,7 @@ def seed(db: Session = Depends(get_db), user=Depends(get_current_user)):
 
 
 class SearchReq(BaseModel):
+    model_config = ConfigDict()
     query: str
     k: int = 5
 

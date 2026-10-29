@@ -1,30 +1,32 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from fastapi.responses import StreamingResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
 import json
 import asyncio
 
 from app.core.security import get_current_user
+from app.core.rate_limit import rate_limit
 from app.services.session import session_service
 
 router = APIRouter()
 
 
 class ChatReq(BaseModel):
+    model_config = ConfigDict()
     message: str
     session_id: Optional[str] = None
 
 
 @router.post("/chat")
-async def chat(req: ChatReq, user=Depends(get_current_user)):
+@rate_limit(max_requests=30, window_seconds=60)
+async def chat(req: ChatReq, request: Request, user=Depends(get_current_user)):
     sid = req.session_id or user.get("sub") or "anon"
     history = session_service.get(f"tutor:{sid}") or []
     history.append({"role": "user", "content": req.message})
     session_service.set(f"tutor:{sid}", history[-10:], ttl=3600)
 
     async def gen():
-        # Socratic hints ladder
         tokens = ["Let's think step by step. ", "What do we know? ", "Can we break it down? ", f"Hint: relate to {req.message[:20]}..."]
         for token in tokens:
             yield f"data: {json.dumps({'token': token})}\n\n"

@@ -5,6 +5,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from functools import lru_cache
 
 from app.core.config import settings
+from app.core.errors import UnauthorizedError
 
 security = HTTPBearer()
 
@@ -25,8 +26,10 @@ async def get_current_user(clerk_data: HTTPAuthorizationCredentials = Depends(se
         unverified_header = jwt.get_unverified_header(token)
         key = next((k for k in jwks.get("keys", []) if k["kid"] == unverified_header["kid"]), None)
         if not key:
-            raise HTTPException(status_code=401, detail="Invalid token")
+            raise UnauthorizedError("Invalid token")
         payload = jwt.decode(token, key, algorithms=["RS256"], options={"verify_aud": False})
         return payload
+    except UnauthorizedError:
+        raise
     except Exception as e:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=str(e))
+        raise UnauthorizedError("Invalid or expired token")

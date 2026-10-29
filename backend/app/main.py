@@ -6,7 +6,13 @@ from app.api.v1 import router as api_router
 from app.core.config import settings
 from app.core.errors import APIError
 
-app = FastAPI(title="EdTech Assistant API", version="0.1.0")
+app = FastAPI(
+    title="EdTech Assistant API",
+    version="0.1.0",
+    description="API for EdTech Assistant - AI-powered math tutoring platform",
+    docs_url="/docs",
+    redoc_url="/redoc",
+)
 
 app.add_middleware(
     CORSMiddleware,

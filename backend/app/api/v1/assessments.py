@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
 
 from app.core.db import get_db
 from app.core.security import get_current_user
+from app.core.errors import NotFoundError
 from app.models.user import User
 from app.models.assessment import Assessment, AssessmentItem
 from app.models.mastery import Mastery
@@ -13,6 +14,7 @@ router = APIRouter()
 
 
 class GenReq(BaseModel):
+    model_config = ConfigDict()
     topic_id: Optional[str] = None
     count: int = 5
 
@@ -22,7 +24,7 @@ def generate(req: GenReq, db: Session = Depends(get_db), user=Depends(get_curren
     clerk_id = user.get("sub")
     u = db.query(User).filter(User.clerk_id == clerk_id).first()
     if not u:
-        return {"error": "user not found"}
+        raise NotFoundError("User not found")
     difficulty = 0.5
     if req.topic_id:
         m = db.query(Mastery).filter(Mastery.user_id == u.id, Mastery.topic_id == req.topic_id).first()

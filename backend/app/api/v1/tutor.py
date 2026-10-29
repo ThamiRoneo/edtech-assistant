@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
 import json
 import asyncio
@@ -12,6 +12,7 @@ router = APIRouter()
 
 
 class ChatReq(BaseModel):
+    model_config = ConfigDict()
     message: str
     session_id: Optional[str] = None
 
@@ -24,7 +25,6 @@ async def chat(req: ChatReq, user=Depends(get_current_user)):
     session_service.set(f"tutor:{sid}", history[-10:], ttl=3600)
 
     async def gen():
-        # Socratic hints ladder
         tokens = ["Let's think step by step. ", "What do we know? ", "Can we break it down? ", f"Hint: relate to {req.message[:20]}..."]
         for token in tokens:
             yield f"data: {json.dumps({'token': token})}\n\n"

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, DateTime, func, ForeignKey, Text, JSON
+from sqlalchemy import Column, String, DateTime, func, ForeignKey, Text, JSON, Index
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 
@@ -16,3 +16,8 @@ class Submission(Base):
     status = Column(String, default="pending")  # pending|grading|graded|failed
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+
+    __table_args__ = (
+        Index('idx_submissions_user_created', 'user_id', 'created_at'),
+        Index('idx_submissions_status', 'status'),
+    )

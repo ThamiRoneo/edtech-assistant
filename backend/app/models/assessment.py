@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, DateTime, func, ForeignKey, JSON, Float
+from sqlalchemy import Column, String, DateTime, func, ForeignKey, JSON, Float, Index
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 
@@ -15,6 +15,11 @@ class Assessment(Base):
     status = Column(String, default="pending")
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
+    __table_args__ = (
+        Index('idx_assessments_user_created', 'user_id', 'created_at'),
+        Index('idx_assessments_topic', 'topic_id'),
+    )
+
 
 class AssessmentItem(Base):
     __tablename__ = "assessment_items"
@@ -25,3 +30,7 @@ class AssessmentItem(Base):
     choices = Column(JSON)
     correct_answer = Column(String)
     explanation = Column(String)
+
+    __table_args__ = (
+        Index('idx_assessment_items_assessment', 'assessment_id'),
+    )

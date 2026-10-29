@@ -9,6 +9,7 @@ from app.services.retrieval import retrieval_service
 from app.models.knowledge import KnowledgeChunk
 from app.services.curriculum import CURRICULUM_SEED
 from app.services.embeddings import embedding_service
+from app.schemas.pagination import PaginationParams
 
 router = APIRouter()
 
@@ -50,6 +51,14 @@ class SearchReq(BaseModel):
     model_config = ConfigDict()
     query: str
     k: int = 5
+
+
+@router.get("/chunks")
+def list_chunks(page: PaginationParams = Depends(), db: Session = Depends(get_db), user=Depends(get_current_user)):
+    q = db.query(KnowledgeChunk).order_by(KnowledgeChunk.id.desc())
+    total = q.count()
+    items = q.offset(page.offset).limit(page.limit).all()
+    return {"items": [{"id": str(r.id), "source": r.source, "content": r.content[:200]} for r in items], "total": total, "limit": page.limit, "offset": page.offset}
 
 
 @router.get("/search")

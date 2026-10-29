@@ -9,6 +9,7 @@ from app.core.errors import NotFoundError
 from app.models.user import User
 from app.models.assessment import Assessment, AssessmentItem
 from app.models.mastery import Mastery
+from app.schemas.pagination import PaginationParams, Page
 
 router = APIRouter()
 
@@ -52,9 +53,23 @@ def generate(req: GenReq, db: Session = Depends(get_db), user=Depends(get_curren
 
 
 @router.get("/bank")
-def get_bank():
+def get_bank(page: PaginationParams = Depends(), db: Session = Depends(get_db)):
     from app.services.question_bank import MATH_QUESTIONS
-    return {"questions": MATH_QUESTIONS}
+    total = len(MATH_QUESTIONS)
+    items = MATH_QUESTIONS[page.offset:page.offset + page.limit]
+    return {"items": items, "total": total, "limit": page.limit, "offset": page.offset}
+
+
+@router.get("/assessments")
+def list_assessments(page: PaginationParams = Depends(), db: Session = Depends(get_db), user=Depends(get_current_user)):
+    clerk_id = user.get("sub")
+    u = db.query(User).filter(User.clerk_id == clerk_id).first()
+    if not u:
+        raise NotFoundError("User not found")
+    q = db.query(Assessment).filter(Assessment.user_id == u.id).order_by(Assessment.created_at.desc())
+    total = q.count()
+    items = q.offset(page.offset).limit(page.limit).all()
+    return {"items": [{"id": str(a.id), "topic_id": a.topic_id, "difficulty": a.difficulty, "status": a.status} for a in items], "total": total, "limit": page.limit, "offset": page.offset}
 
 
 @router.post("/{assessment_id}/submit")

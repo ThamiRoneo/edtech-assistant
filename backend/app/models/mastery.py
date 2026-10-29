@@ -1,4 +1,4 @@
-from sqlalchemy import Column, DateTime, func, ForeignKey, Float, UniqueConstraint
+from sqlalchemy import Column, DateTime, func, ForeignKey, Float, UniqueConstraint, Index
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 
@@ -7,7 +7,7 @@ from app.core.db import Base
 
 class Mastery(Base):
     __tablename__ = "mastery"
-    __table_args__ = (UniqueConstraint("user_id", "topic_id"),)
+    __table_args__ = (UniqueConstraint("user_id", "topic_id"), Index('idx_mastery_user', 'user_id'))
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)

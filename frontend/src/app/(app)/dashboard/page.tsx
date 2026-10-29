@@ -1,8 +1,14 @@
 'use client';
 
-import Link from "next/link";
-import StatCard from "@/components/StatCard";
-import MasteryTrack from "@/components/MasteryTrack";
+import dynamic from "next/dynamic";
+
+const StatCard = dynamic(() => import("@/components/StatCard"), {
+  loading: () => <div className="h-24 rounded-xl border border-border bg-surface animate-pulse" />,
+});
+
+const MasteryTrack = dynamic(() => import("@/components/MasteryTrack"), {
+  loading: () => <div className="h-48 rounded-xl border border-border bg-surface animate-pulse" />,
+});
 
 const DEMO_TOPICS = [
   { id: "frac", name: "Fractions", score: 0.92 },

@@ -1,10 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException, Header, Query
+from fastapi import APIRouter, Depends, HTTPException, Header, Query, Request
 from sqlalchemy.orm import Session
 from typing import List, Optional
 
 from app.core.db import get_db
 from app.core.security import get_current_user
 from app.core.errors import NotFoundError, ValidationError, ConflictError
+from app.core.rate_limit import rate_limit
 from app.schemas.submission import SubmissionCreate, SubmissionOut
 from app.schemas.pagination import PaginationParams, PaginatedResponse
 from app.models.submission import Submission
@@ -23,8 +24,10 @@ except Exception:
 
 
 @router.post("/", response_model=SubmissionOut)
+@rate_limit(max_requests=20, window_seconds=60)
 def create_submission(
     data: SubmissionCreate,
+    request: Request,
     db: Session = Depends(get_db),
     user=Depends(get_current_user),
     idempotency_key: Optional[str] = Header(None, alias="Idempotency-Key"),

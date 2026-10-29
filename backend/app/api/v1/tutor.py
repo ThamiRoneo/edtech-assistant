@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, ConfigDict
 from typing import Optional
@@ -6,6 +6,7 @@ import json
 import asyncio
 
 from app.core.security import get_current_user
+from app.core.rate_limit import rate_limit
 from app.services.session import session_service
 
 router = APIRouter()
@@ -18,7 +19,8 @@ class ChatReq(BaseModel):
 
 
 @router.post("/chat")
-async def chat(req: ChatReq, user=Depends(get_current_user)):
+@rate_limit(max_requests=30, window_seconds=60)
+async def chat(req: ChatReq, request: Request, user=Depends(get_current_user)):
     sid = req.session_id or user.get("sub") or "anon"
     history = session_service.get(f"tutor:{sid}") or []
     history.append({"role": "user", "content": req.message})

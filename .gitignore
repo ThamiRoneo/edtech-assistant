@@ -16,3 +16,5 @@ node_modules/
 *.log
 .impeccable/
 PRODUCT.md
+HANDOFF.mdinfra/.env.prod
+infra/.env.bak

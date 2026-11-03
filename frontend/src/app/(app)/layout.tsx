@@ -8,7 +8,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <Rail />
       <div className="flex-1 min-h-screen flex flex-col" style={{ marginLeft: "var(--shell-rail-w)" }}>
         <TopBar />
-        <main className="px-6 pb-10 pt-2 max-w-[1280px] mx-auto w-full flex-1">
+        <main className="px-6 pb-10 pt-2 max-w-7xl mx-auto w-full flex-1">
           {children}
         </main>
         <Footer />

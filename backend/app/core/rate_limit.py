@@ -1,16 +1,25 @@
-from redis import Redis
 from time import time
 from fastapi import Request, HTTPException
 from functools import wraps
-import os
 
-try:
-    redis_client = Redis.from_url(os.getenv("REDIS_URL", "redis://localhost:6379/0"), decode_responses=True)
-except Exception:
-    redis_client = None
+from app.core.redis import get_redis
+from app.core.config import settings
 
 
-def rate_limit(max_requests: int = 10, window_seconds: int = 60):
+def _get_client_ip(request: Request) -> str:
+    if request.client and request.client.host in settings.TRUSTED_PROXIES:
+        xff = request.headers.get("X-Forwarded-For")
+        if xff:
+            return xff.split(",")[0].strip()
+        xri = request.headers.get("X-Real-IP")
+        if xri:
+            return xri.strip()
+    if request.client:
+        return request.client.host
+    return "unknown"
+
+
+def rate_limit(max_requests: int = 10, window_seconds: int = 60, key_prefix: str | None = None):
     def decorator(func):
         @wraps(func)
         async def wrapper(*args, **kwargs):
@@ -24,18 +33,34 @@ def rate_limit(max_requests: int = 10, window_seconds: int = 60):
                     if isinstance(v, Request):
                         request = v
                         break
+            redis_client = get_redis()
             if request is None or redis_client is None:
+                if settings.RATE_LIMIT_FAIL_CLOSED and settings.ENVIRONMENT == "production":
+                    raise HTTPException(status_code=503, detail="Rate limiting unavailable")
                 return await func(*args, **kwargs)
-            key = f"ratelimit:{request.client.host if request.client else 'unknown'}:{func.__name__}"
-            now = time()
-            pipe = redis_client.pipeline()
-            pipe.zremrangebyscore(key, 0, now - window_seconds)
-            pipe.zadd(key, {str(now): now})
-            pipe.zcard(key)
-            pipe.expire(key, window_seconds)
-            _, _, count, _ = pipe.execute()
-            if count > max_requests:
-                raise HTTPException(status_code=429, detail="Too many requests")
+            user = kwargs.get("user") or None
+            user_id = None
+            if isinstance(user, dict):
+                user_id = user.get("sub") or user.get("id")
+            ip = _get_client_ip(request)
+            prefix = key_prefix or func.__name__
+            key = f"ratelimit:{prefix}:{user_id or ip}"
+            try:
+                now = time()
+                pipe = redis_client.pipeline()
+                pipe.zremrangebyscore(key, 0, now - window_seconds)
+                pipe.zadd(key, {str(now): now})
+                pipe.zcard(key)
+                pipe.expire(key, window_seconds)
+                _, _, count, _ = pipe.execute()
+                if count > max_requests:
+                    raise HTTPException(status_code=429, detail="Too many requests")
+            except HTTPException:
+                raise
+            except Exception:
+                if settings.RATE_LIMIT_FAIL_CLOSED and settings.ENVIRONMENT == "production":
+                    raise HTTPException(status_code=503, detail="Rate limiting unavailable")
+                return await func(*args, **kwargs)
             return await func(*args, **kwargs)
         return wrapper
     return decorator

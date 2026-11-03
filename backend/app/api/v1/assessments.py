@@ -9,7 +9,7 @@ from app.core.errors import NotFoundError
 from app.models.user import User
 from app.models.assessment import Assessment, AssessmentItem
 from app.models.mastery import Mastery
-from app.schemas.pagination import PaginationParams, Page
+from app.schemas.pagination import PaginationParams, PaginatedResponse
 
 router = APIRouter()
 

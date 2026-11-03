@@ -14,9 +14,6 @@ importers:
       axios:
         specifier: ^1.7.7
         version: 1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
-      frontend:
-        specifier: 'link:'
-        version: 'link:'
       katex:
         specifier: ^0.16.11
         version: 0.16.47

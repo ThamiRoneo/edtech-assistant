@@ -21,7 +21,7 @@ export default function TopBar() {
       style={{ left: "var(--shell-rail-w)", height: "var(--shell-top-h)" }}
     >
       <div className="flex items-center gap-2 text-sm text-muted">
-        <Link href="/dashboard" className="hover:text-foreground transition-colors">
+        <Link href="/" className="hover:text-foreground transition-colors">
           Home
         </Link>
         <ChevronIcon />

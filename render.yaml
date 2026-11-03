@@ -1,0 +1,48 @@
+services:
+  - type: web
+    name: edtech-assistant-api
+    env: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: CLERK_SECRET_KEY
+        sync: false
+      - key: CLERK_PUBLISHABLE_KEY
+        sync: false
+      - key: CLERK_JWKS_URL
+        sync: false
+      - key: CLERK_ISSUER
+        sync: false
+      - key: CLERK_AUDIENCE
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_API_BASE
+        value: https://api.openai.com/v1
+      - key: LLM_MODEL_GRADE
+        value: gpt-4o-mini
+      - key: LLM_MODEL_TUTOR
+        value: gpt-4o
+      - key: CORS_ORIGINS
+        sync: false
+      - key: TRUSTED_PROXIES
+        value: "*"
+      - key: RATE_LIMIT_FAIL_CLOSED
+        value: "true"
+  - type: worker
+    name: edtech-assistant-worker
+    env: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    dockerCommand: celery -A app.tasks worker --loglevel=info --concurrency=4
+    plan: starter
+    envVars:
+      - fromGroup: edtech-assistant-api

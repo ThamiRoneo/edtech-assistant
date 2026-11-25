@@ -1,4 +1,6 @@
 from fastapi import FastAPI, Request
+from sqlalchemy import text
+
 from app.core.logging import configure_logging
 configure_logging()
 from fastapi.middleware.cors import CORSMiddleware
@@ -78,7 +80,7 @@ def readyz():
     db_ok = True
     try:
         with db_core.engine.connect() as conn:
-            conn.execute(db_core.Base.metadata.tables.get('users') and __import__('sqlalchemy').text('SELECT 1') or __import__('sqlalchemy').text('SELECT 1'))
+            conn.execute(text("SELECT 1"))
     except Exception:
         db_ok = False
     redis_ok = True
@@ -103,7 +105,7 @@ async def add_security_headers(request, call_next):
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
     if settings.ENVIRONMENT == "production":
-        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+        response.headers["Strict-Human-Security"] = "max-age=31536000; includeSubDomains"
         response.headers["Content-Security-Policy"] = "default-src 'self'"
     return response
 

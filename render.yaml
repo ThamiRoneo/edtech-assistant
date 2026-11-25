@@ -5,7 +5,8 @@ services:
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
     plan: starter
-    healthCheckPath: /health
+    healthCheckPath: /readyz
+    preDeployCommand: alembic upgrade head
     envVars:
       - key: ENVIRONMENT
         value: production
